@@ -1,0 +1,12 @@
+[submodule "path/to/submodule1"]
+	path = path/to/submodule1
+	url = https://github.com/ductrong6104/fontend-tttn-client
+[submodule "frontend-client"]
+	path = frontend-client
+	url = https://github.com/ductrong6104/fontend-tttn-client
+[submodule "backend"]
+	path = backend
+	url = https://github.com/ductrong6104/backend-tttn.git
+[submodule "frontend-company"]
+	path = frontend-company
+	url = https://github.com/ductrong6104/fontend-tttn.git
