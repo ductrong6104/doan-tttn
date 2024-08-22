@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    build: 
+      context: ./database
+    ports:
+      - "1433:1433"
+    networks:
+      - bridge
+  backend-tttn:
+    build:
+      context: ./backend-tttn
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend-tttn:/app
+    networks:
+      - bridge
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://sqlserver:1433;encrypt=true;trustServerCertificate=true;databaseName=DienLuc
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=P@ssw0rd!2024
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.SQLServerDialect
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.SQLServerDialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=none
+      - SPRING_JPA_HIBERNATE_NAMING_PHYSICAL_STRATEGY=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      - SPRING_JACKSON_SERIALIZATION_FAIL_ON_EMPTY_BEANS=false
+    depends_on:
+      - sqlserver
+  fontend-tttn-client:
+    build:
+      context: ./fontend-tttn-client
+    volumes:
+      - ./fontend-tttn-client:/app
+    ports:
+      - "4000:4000"
+    depends_on:
+      - backend-tttn
+    networks:
+      - bridge
+
+  fontend-tttn:
+    build:
+      context: ./fontend-tttn
+    volumes:
+      - ./fontend-tttn:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend-tttn
+    networks:
+      - bridge
+
+  
+  
+
+networks:
+  bridge:
+    driver: bridge
